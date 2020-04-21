@@ -18,11 +18,11 @@
 
 // shiftOut part
 #define DS      A0
-#define LATCH   A1
+#define RESET   A1
 #define CLOCK   A2
 
 #define PORTC_DS      0
-#define PORTC_LATCH   1
+#define PORTC_RESET   1
 #define PORTC_CLOCK   2
 
 
@@ -129,23 +129,21 @@ void write_data_bus(byte data)
 //shift out the given address to the 74hc595 registers
 void set_address_bus(unsigned int address)
 {
-
+  //Enable RESET line lo clear data
+  bitSet(PORTC,PORTC_RESET);
+  
   //get high - byte of 16 bit address
   byte hi = address >> 8;
   //get low - byte of 16 bit address
   byte low = address & 0xff;
 
-  //disable latch line
-  bitClear(PORTC,PORTC_LATCH);
+  //Clear RESET to allow shifting the address
+  bitClear(PORTC,PORTC_RESET);
 
   //shift out highbyte
   fastShiftOut(hi);
   //shift out lowbyte
-  fastShiftOut(low);
-
-  //enable latch and set address
-  bitSet(PORTC,PORTC_LATCH);
-
+  fastShiftOut(low); 
 }
 
 //faster shiftOut function then normal IDE function (about 4 times)
@@ -164,8 +162,8 @@ void fastShiftOut(byte data) {
     }
     //register shifts bits on upstroke of clock pin  
     bitSet(PORTC,PORTC_CLOCK);
-    //zero the data pin after shift to prevent bleed through
     bitClear(PORTC,PORTC_DS);
+    //zero the data pin after shift to prevent bleed through
   }
   //stop shifting
   bitClear(PORTC,PORTC_CLOCK);
@@ -482,7 +480,7 @@ void printByte(byte data) {
 void setup() {
   //define the shiuftOut Pins as output
   pinMode(DS, OUTPUT);
-  pinMode(LATCH, OUTPUT);
+  pinMode(RESET, OUTPUT);
   pinMode(CLOCK, OUTPUT);
 
   //define the EEPROM Pins as output
@@ -497,6 +495,8 @@ void setup() {
   //set speed of serial connection
   //Serial.begin(57600);
   Serial.begin(115200);
+
+  Serial.print("Eprommer ready");
 }
 
 /**
@@ -553,8 +553,3 @@ void loop() {
 
 
 }
-
-
-
-
-
