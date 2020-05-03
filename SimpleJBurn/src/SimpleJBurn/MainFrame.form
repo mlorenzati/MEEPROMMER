@@ -167,7 +167,7 @@
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="serialSelectActionPerformed"/>
           </Events>
           <AuxValues>
-            <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="HashSet h = mySerial.getAvailableSerialPorts();&#xa;&#xa;Iterator&lt;CommPortIdentifier&gt; thePorts = h.iterator();&#xa;while (thePorts.hasNext()) {&#xa;    serialSelect.addItem(thePorts.next().getName());&#xa;}        &#xa;     "/>
+            <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="HashSet h = mySerial.getAvailableSerialPorts();&#xa;&#xa;Iterator&lt;java.lang.String&gt; thePorts = h.iterator();&#xa;while (thePorts.hasNext()) {&#xa;    serialSelect.addItem(thePorts.next().getName());&#xa;}        &#xa;     "/>
           </AuxValues>
         </Component>
         <Component class="javax.swing.JButton" name="readButton">

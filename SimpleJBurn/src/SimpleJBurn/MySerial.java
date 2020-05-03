@@ -4,13 +4,12 @@
  */
 package SimpleJBurn;
 
-import gnu.io.CommPort;
-import gnu.io.CommPortIdentifier;
-import gnu.io.SerialPort;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Enumeration;
 import java.util.HashSet;
+
+import com.fazecast.jSerialComm.SerialPort;
 
 /**
  *
@@ -31,20 +30,31 @@ public class MySerial {
      * @return A HashSet containing the CommPortIdentifier for all serial ports
      * that are not currently being used.
      */
-    public static HashSet<CommPortIdentifier> getAvailableSerialPorts() {
-        HashSet<CommPortIdentifier> h = new HashSet<CommPortIdentifier>();
-        Enumeration thePorts = CommPortIdentifier.getPortIdentifiers();
-        while (thePorts.hasMoreElements()) {
-            CommPortIdentifier com = (CommPortIdentifier) thePorts.nextElement();
-            if (com.getPortType() == CommPortIdentifier.PORT_SERIAL) {
-                h.add(com);
-            }
+    public static HashSet<java.lang.String> getAvailableSerialPorts() {
+        SerialPort[] ports = SerialPort.getCommPorts();
+
+        HashSet<java.lang.String> h = new HashSet<java.lang.String>();
+        for (SerialPort port : ports) {
+            h.add(port.getSystemPortName());
         }
         return h;
     }
 
     void connect(String portName, int speed) throws Exception {
-        CommPortIdentifier portIdentifier = CommPortIdentifier.getPortIdentifier(portName);
+        serialPort = SerialPort.getCommPort(portName);
+        
+        boolean openedSuccessfully = serialPort.openPort(0);
+        if (!openedSuccessfully) {
+            throw (new Exception("Error: Port is currently in use"));
+        } else {
+            serialPort.setBaudRate(115200);
+            serialPort.setComPortTimeouts(SerialPort.TIMEOUT_READ_BLOCKING, 1000, 0);
+            in = serialPort.getInputStream();
+            out = serialPort.getOutputStream();
+            
+        }
+
+        /*CommPortIdentifier portIdentifier = CommPortIdentifier.getPortIdentifier(portName);
         if (portIdentifier.isCurrentlyOwned()) {
             throw (new Exception("Error: Port is currently in use"));
         } else {
@@ -59,7 +69,7 @@ public class MySerial {
             } else {
                 throw (new Exception("Error: Only serial ports are handled by this example."));
             }
-        }
+        }*/
     }
 
     void disconnect() throws Exception {
@@ -74,7 +84,7 @@ public class MySerial {
         out = null;
 
         if (serialPort != null) {
-            serialPort.close(); // close the port
+            serialPort.closePort();
         }
         serialPort = null;
     }

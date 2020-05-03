@@ -4,7 +4,6 @@
  */
 package SimpleJBurn;
 
-import gnu.io.CommPortIdentifier;
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Toolkit;
@@ -326,11 +325,11 @@ public class MainFrame extends javax.swing.JFrame implements PropertyChangeListe
             }
         });
 
-        HashSet h = mySerial.getAvailableSerialPorts();
+        HashSet availableSerialPorthash = mySerial.getAvailableSerialPorts();
 
-        Iterator<CommPortIdentifier> thePorts = h.iterator();
+        Iterator<java.lang.String> thePorts = availableSerialPorthash.iterator();
         while (thePorts.hasNext()) {
-            serialSelect.addItem(thePorts.next().getName());
+            serialSelect.addItem(thePorts.next());
         }
 
         serialSelect.addActionListener(new java.awt.event.ActionListener() {
