@@ -491,6 +491,7 @@ void setup() {
   pinMode(CE, OUTPUT);
   digitalWrite(WE, HIGH);
   pinMode(WE, OUTPUT);
+  bitSet(PORTC,PORTC_RESET);
 
   //set speed of serial connection
   //Serial.begin(57600);
@@ -508,6 +509,7 @@ void loop() {
   byte cmd = parseCommand();
   int bytes = 0;
   switch(cmd) {
+  //<CMD>,<STARTADDR>,<ENDADDR>,<LENGTH>
   case SET_ADDRESS:
     // Set the address bus to an arbitrary value.
     // Useful for debugging shift-register wiring, byte-order.
