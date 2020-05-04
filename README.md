@@ -16,3 +16,6 @@ between a host computer and an eeprom.
 
 For the host computer a Java based GUI application is available that uses the RXTX 
 library to interface the programmer.
+
+Updated HW to allow using CD4015 chips for addressing the eprom memory
+Updated serial com library to jSerialComm-2.6.2.jar

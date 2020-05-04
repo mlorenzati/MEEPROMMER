@@ -13,3 +13,5 @@ The current version has the following features:
 - set an offset for burning data
 - compare image data and EEPROM data
 - clear EEPROM to 0x00 bytes
+
+Removed dependency to RXTX in favor of JSerialComm
